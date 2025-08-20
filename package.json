@@ -1,0 +1,13 @@
+{
+  "name": "ufc-rankings-scraper",
+  "version": "1.0.0",
+  "description": "UFC Rankings page with real fighter photos",
+  "main": "index.html",
+  "scripts": {
+    "scrape": "node scraper.js",
+    "install-playwright": "npx playwright install"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

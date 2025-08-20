@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classement UFC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ufc-red': '#d20a0a',
+                        'ufc-gold': '#f2b90c'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-5xl font-bold text-ufc-red mb-2">UFC RANKINGS</h1>
+            <p class="text-gray-400 text-lg" id="lastUpdated">Dernière mise à jour: Chargement...</p>
+        </header>
+
+        <!-- Debug Console -->
+        <div id="debug" class="mb-4 p-4 bg-gray-800 rounded-lg text-sm">
+            <h3 class="text-ufc-gold font-bold mb-2">🐛 Debug Console:</h3>
+            <div id="debug-output" class="text-gray-300"></div>
+        </div>
+
+        <!-- Test Images -->
+        <div class="mb-8 p-4 bg-gray-800 rounded-lg">
+            <h3 class="text-ufc-gold font-bold mb-4">🧪 Test d'images:</h3>
+            <div class="flex gap-4 flex-wrap">
+                <div class="text-center">
+                    <p class="text-sm mb-2">Picsum (baseline)</p>
+                    <img src="https://picsum.photos/100/120?random=1" 
+                         class="w-20 h-24 object-cover rounded border-2 border-green-500"
+                         onload="addDebug('✅ Picsum: OK')"
+                         onerror="addDebug('❌ Picsum: FAIL')">
+                </div>
+                <div class="text-center">
+                    <p class="text-sm mb-2">Avatar placeholder</p>
+                    <img src="https://www.gravatar.com/avatar/placeholder?s=120&d=mp" 
+                         class="w-20 h-24 object-cover rounded border-2 border-blue-500"
+                         onload="addDebug('✅ Gravatar: OK')"
+                         onerror="addDebug('❌ Gravatar: FAIL')">
+                </div>
+                <div class="text-center">
+                    <p class="text-sm mb-2">Placeholder.com</p>
+                    <img src="https://via.placeholder.com/100x120/333/fff?text=UFC" 
+                         class="w-20 h-24 object-cover rounded border-2 border-yellow-500"
+                         onload="addDebug('✅ Placeholder: OK')"
+                         onerror="addDebug('❌ Placeholder: FAIL')">
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-ufc-red"></div>
+            <p class="mt-4 text-gray-400">Chargement des classements...</p>
+        </div>
+
+        <!-- Rankings Container -->
+        <div id="rankings" class="hidden space-y-8">
+            <!-- Pound for Pound -->
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h2 class="text-3xl font-bold text-ufc-gold mb-6 flex items-center">
+                    <span class="mr-3">👑</span>
+                    Pound for Pound
+                </h2>
+                <div id="p4p-rankings" class="space-y-3"></div>
+            </div>
+
+            <!-- Weight Classes -->
+            <div id="weight-classes" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Weight classes will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addDebug(message) {
+            const output = document.getElementById('debug-output');
+            output.innerHTML += message + '<br>';
+            console.log(message);
+        }
+
+        // UFC Weight Classes
+        const weightClasses = [
+            { name: 'Heavyweight', limit: '265 lbs' },
+            { name: 'Light Heavyweight', limit: '205 lbs' },
+            { name: 'Middleweight', limit: '185 lbs' },
+            { name: 'Welterweight', limit: '170 lbs' },
+            { name: 'Lightweight', limit: '155 lbs' },
+            { name: 'Featherweight', limit: '145 lbs' },
+            { name: 'Bantamweight', limit: '135 lbs' },
+            { name: 'Flyweight', limit: '125 lbs' },
+            { name: "Women's Bantamweight", limit: '135 lbs' },
+            { name: "Women's Featherweight", limit: '145 lbs' },
+            { name: "Women's Flyweight", limit: '125 lbs' },
+            { name: "Women's Strawweight", limit: '115 lbs' }
+        ];
+
+        // Données UFC avec images Picsum qui fonctionnent !
+        const ufcRankings = {
+            p4p: [
+                { rank: 1, name: 'Islam Makhachev', nickname: 'The Dagestani Destroyer', record: '25-1-0', photo: 'https://picsum.photos/100/120?random=101' },
+                { rank: 2, name: 'Jon Jones', nickname: 'Bones', record: '27-1-0', photo: 'https://picsum.photos/100/120?random=102' },
+                { rank: 3, name: 'Alexander Volkanovski', nickname: 'The Great', record: '26-3-0', photo: 'https://picsum.photos/100/120?random=103' },
+                { rank: 4, name: 'Leon Edwards', nickname: 'Rocky', record: '22-3-0', photo: 'https://picsum.photos/100/120?random=104' },
+                { rank: 5, name: 'Sean O\'Malley', nickname: 'Suga', record: '17-1-0', photo: 'https://picsum.photos/100/120?random=105' },
+                { rank: 6, name: 'Charles Oliveira', nickname: 'Do Bronx', record: '34-9-0', photo: 'https://picsum.photos/100/120?random=106' },
+                { rank: 7, name: 'Max Holloway', nickname: 'Blessed', record: '25-7-0', photo: 'https://picsum.photos/100/120?random=107' },
+                { rank: 8, name: 'Dustin Poirier', nickname: 'The Diamond', record: '29-8-0', photo: 'https://picsum.photos/100/120?random=108' },
+                { rank: 9, name: 'Dricus du Plessis', nickname: 'Stillknocks', record: '21-2-0', photo: 'https://picsum.photos/100/120?random=109' },
+                { rank: 10, name: 'Alex Pereira', nickname: 'Poatan', record: '9-2-0', photo: 'https://picsum.photos/100/120?random=110' }
+            ],
+            heavyweight: [
+                { rank: 'C', name: 'Jon Jones', nickname: 'Bones', record: '27-1-0', photo: 'https://picsum.photos/100/120?random=201' },
+                { rank: 1, name: 'Stipe Miocic', nickname: '', record: '20-4-0', photo: 'https://picsum.photos/100/120?random=202' },
+                { rank: 2, name: 'Tom Aspinall', nickname: '', record: '13-3-0', photo: 'https://picsum.photos/100/120?random=203' },
+                { rank: 3, name: 'Ciryl Gane', nickname: 'Bon Gamin', record: '11-2-0', photo: 'https://picsum.photos/100/120?random=204' },
+                { rank: 4, name: 'Curtis Blaydes', nickname: 'Razor', record: '17-4-0', photo: 'https://picsum.photos/100/120?random=205' }
+            ],
+            lightheavyweight: [
+                { rank: 'C', name: 'Alex Pereira', nickname: 'Poatan', record: '9-2-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Jamahal Hill', nickname: 'Sweet Dreams', record: '12-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=HILL' },
+                { rank: 2, name: 'Magomed Ankalaev', nickname: '', record: '18-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=MAGOMED' },
+                { rank: 3, name: 'Jan Blachowicz', nickname: '', record: '29-9-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=JAN' },
+                { rank: 4, name: 'Aleksandar Rakic', nickname: 'Rocket', record: '14-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=RAKIC' }
+            ],
+            middleweight: [
+                { rank: 'C', name: 'Dricus du Plessis', nickname: 'Stillknocks', record: '21-2-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Sean Strickland', nickname: 'Tarzan', record: '28-5-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=SEAN' },
+                { rank: 2, name: 'Israel Adesanya', nickname: 'The Last Stylebender', record: '24-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=IZZY' },
+                { rank: 3, name: 'Robert Whittaker', nickname: 'The Reaper', record: '25-7-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=BOBBY' },
+                { rank: 4, name: 'Marvin Vettori', nickname: 'The Italian Dream', record: '19-6-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=MARVIN' }
+            ],
+            welterweight: [
+                { rank: 'C', name: 'Belal Muhammad', nickname: 'Remember the Name', record: '23-3-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Leon Edwards', nickname: 'Rocky', record: '22-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=LEON' },
+                { rank: 2, name: 'Shavkat Rakhmonov', nickname: 'Nomad', record: '18-0-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=SHAVKAT' },
+                { rank: 3, name: 'Kamaru Usman', nickname: 'The Nigerian Nightmare', record: '20-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=KAMARU' },
+                { rank: 4, name: 'Colby Covington', nickname: 'Chaos', record: '17-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=COLBY' }
+            ],
+            lightweight: [
+                { rank: 'C', name: 'Islam Makhachev', nickname: 'The Dagestani Destroyer', record: '25-1-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Arman Tsarukyan', nickname: 'Ahalkalakets', record: '21-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=ARMAN' },
+                { rank: 2, name: 'Charles Oliveira', nickname: 'Do Bronx', record: '34-9-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=CHARLES' },
+                { rank: 3, name: 'Dustin Poirier', nickname: 'The Diamond', record: '29-8-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=DUSTIN' },
+                { rank: 4, name: 'Justin Gaethje', nickname: 'The Highlight', record: '25-5-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=JUSTIN' }
+            ],
+            featherweight: [
+                { rank: 'C', name: 'Ilia Topuria', nickname: 'El Matador', record: '15-0-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Max Holloway', nickname: 'Blessed', record: '25-7-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=MAX' },
+                { rank: 2, name: 'Alexander Volkanovski', nickname: 'The Great', record: '26-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=VOLK' },
+                { rank: 3, name: 'Brian Ortega', nickname: 'T-City', record: '15-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=BRIAN' },
+                { rank: 4, name: 'Josh Emmett', nickname: '', record: '18-4-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=JOSH' }
+            ],
+            bantamweight: [
+                { rank: 'C', name: 'Merab Dvalishvili', nickname: 'The Machine', record: '17-4-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Sean O\'Malley', nickname: 'Suga', record: '17-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=SUGA' },
+                { rank: 2, name: 'Cory Sandhagen', nickname: 'The Sandman', record: '17-4-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=CORY' },
+                { rank: 3, name: 'Petr Yan', nickname: 'No Mercy', record: '17-4-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=PETR' },
+                { rank: 4, name: 'Jose Aldo', nickname: 'Junior', record: '32-8-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=ALDO' }
+            ],
+            flyweight: [
+                { rank: 'C', name: 'Alexandre Pantoja', nickname: 'The Cannibal', record: '27-5-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Brandon Royval', nickname: 'Raw Dawg', record: '15-6-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=ROYVAL' },
+                { rank: 2, name: 'Kai Kara-France', nickname: 'Don\'t Blink', record: '24-10-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=KAI' },
+                { rank: 3, name: 'Amir Albazi', nickname: 'The Prince', record: '17-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=AMIR' },
+                { rank: 4, name: 'Brandon Moreno', nickname: 'The Assassin Baby', record: '21-6-2', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=MORENO' }
+            ],
+            womensbantamweight: [
+                { rank: 'C', name: 'Raquel Pennington', nickname: 'Rocky', record: '16-8-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Julianna Peña', nickname: 'The Venezuelan Vixen', record: '11-5-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=PENA' },
+                { rank: 2, name: 'Holly Holm', nickname: 'The Preacher\'s Daughter', record: '15-6-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=HOLLY' },
+                { rank: 3, name: 'Ketlen Vieira', nickname: 'Fenomeno', record: '13-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=KETLEN' },
+                { rank: 4, name: 'Mayra Bueno Silva', nickname: 'Sheetara', record: '10-2-1', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=MAYRA' }
+            ],
+            womensfeatherweight: [
+                { rank: 'C', name: 'Amanda Nunes', nickname: 'The Lioness', record: '22-5-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Julianna Peña', nickname: 'The Venezuelan Vixen', record: '11-5-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=PENA' },
+                { rank: 2, name: 'Holly Holm', nickname: 'The Preacher\'s Daughter', record: '15-6-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=HOLLY' },
+                { rank: 3, name: 'Germaine de Randamie', nickname: 'The Iron Lady', record: '10-5-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=GDR' },
+                { rank: 4, name: 'Kayla Harrison', nickname: '', record: '16-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=KAYLA' }
+            ],
+            womensflyweight: [
+                { rank: 'C', name: 'Alexa Grasso', nickname: 'The Mexican Dynamite', record: '16-3-1', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Valentina Shevchenko', nickname: 'Bullet', record: '23-4-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=VAL' },
+                { rank: 2, name: 'Katlyn Chookagian', nickname: 'Blond Fighter', record: '19-5-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=KATLYN' },
+                { rank: 3, name: 'Manon Fiorot', nickname: 'The Beast', record: '11-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=MANON' },
+                { rank: 4, name: 'Erin Blanchfield', nickname: 'Cold Blooded', record: '12-1-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=ERIN' }
+            ],
+            womensstrawweight: [
+                { rank: 'C', name: 'Zhang Weili', nickname: 'Magnum', record: '24-3-0', photo: 'https://via.placeholder.com/100x120/d20a0a/ffffff?text=CHAMP' },
+                { rank: 1, name: 'Tatiana Suarez', nickname: '', record: '10-0-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=TATIANA' },
+                { rank: 2, name: 'Jessica Andrade', nickname: 'Bate Estaca', record: '25-12-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=JESSICA' },
+                { rank: 3, name: 'Virna Jandiroba', nickname: '', record: '20-3-0', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=VIRNA' },
+                { rank: 4, name: 'Amanda Lemos', nickname: 'Amandinha', record: '13-3-1', photo: 'https://via.placeholder.com/100x120/1a1a1a/f2b90c?text=LEMOS' }
+            ]
+        };
+
+        function createFighterCard(fighter, isChampion = false) {
+            const rankDisplay = fighter.rank === 'C' ? '👑' : `#${fighter.rank}`;
+            const championClass = isChampion || fighter.rank === 'C' ? 'border-ufc-gold bg-gradient-to-r from-yellow-900/20 to-yellow-800/20' : 'border-gray-600';
+            
+            return `
+                <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg border ${championClass} hover:bg-gray-600 transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-2xl font-bold text-ufc-gold w-12 text-center">
+                            ${rankDisplay}
+                        </div>
+                        <div class="w-16 h-20 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg overflow-hidden border border-gray-600 flex-shrink-0 flex items-center justify-center">
+                            <img src="${fighter.photo}" 
+                                 alt="${fighter.name}" 
+                                 class="w-full h-full object-cover transition-opacity duration-300"
+                                 style="display: block;"
+                                 onload="addDebug('✅ Photo OK: ${fighter.name}')"
+                                 onerror="addDebug('❌ Photo FAIL: ${fighter.name}'); this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-full bg-gradient-to-br from-ufc-red/20 to-ufc-gold/20 flex items-center justify-center text-2xl" style="display: none;">
+                                🥊
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-lg font-semibold">${fighter.name}</h3>
+                            ${fighter.nickname ? `<p class="text-ufc-gold text-sm font-medium">"${fighter.nickname}"</p>` : ''}
+                            <p class="text-gray-400 text-sm">${fighter.record}</p>
+                        </div>
+                    </div>
+                    ${fighter.rank === 'C' ? '<span class="text-ufc-gold font-bold text-sm bg-ufc-gold/20 px-2 py-1 rounded">CHAMPION</span>' : ''}
+                </div>
+            `;
+        }
+
+        function displayRankings() {
+            addDebug('🎯 Début affichage des classements...');
+            
+            // Display P4P rankings
+            const p4pContainer = document.getElementById('p4p-rankings');
+            p4pContainer.innerHTML = ufcRankings.p4p.map(fighter => createFighterCard(fighter)).join('');
+            addDebug('✅ P4P affiché');
+
+            // Display weight classes
+            const weightClassesContainer = document.getElementById('weight-classes');
+            let weightClassHTML = '';
+
+            weightClasses.forEach(weightClass => {
+                const className = weightClass.name.toLowerCase().replace(/[^a-z]/g, '');
+                const fighters = ufcRankings[className] || [];
+
+                if (fighters.length > 0) {
+                    weightClassHTML += `
+                        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                            <h3 class="text-2xl font-bold text-ufc-gold mb-4">
+                                ${weightClass.name}
+                                <span class="text-sm text-gray-400 font-normal">(${weightClass.limit})</span>
+                            </h3>
+                            <div class="space-y-3">
+                                ${fighters.slice(0, 5).map(fighter => createFighterCard(fighter)).join('')}
+                            </div>
+                        </div>
+                    `;
+                    addDebug(`✅ ${weightClass.name} affiché`);
+                }
+            });
+
+            weightClassesContainer.innerHTML = weightClassHTML;
+            addDebug('🎉 Tous les classements affichés !');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('rankings').classList.remove('hidden');
+        }
+
+        // Initialize page
+        async function init() {
+            try {
+                addDebug('🚀 Initialisation de la page...');
+                
+                // Update last updated date
+                document.getElementById('lastUpdated').textContent = 
+                    `Dernière mise à jour: ${new Date().toLocaleDateString('fr-FR', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}`;
+
+                // Simulate loading delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                displayRankings();
+                hideLoading();
+                
+                addDebug('✅ Page entièrement chargée !');
+            } catch (error) {
+                addDebug(`❌ Erreur: ${error.message}`);
+                console.error('❌ Erreur:', error);
+            }
+        }
+
+        // Start the application
+        addDebug('📍 Script chargé, démarrage...');
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Photos UFC</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #111; color: white; }
+        .test-img { width: 100px; height: 120px; margin: 10px; border: 2px solid #d20a0a; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Images UFC</h1>
+    
+    <h2>Test 1: Image statique simple</h2>
+    <img src="https://picsum.photos/100/120?random=1" alt="Test 1" class="test-img">
+    
+    <h2>Test 2: Images via JavaScript</h2>
+    <div id="js-test"></div>
+    
+    <h2>Test 3: Données UFC</h2>
+    <div id="ufc-test"></div>
+    
+    <script>
+        console.log("🚀 Script de test démarré");
+        
+        // Test 2: Créer image via JS
+        const jsDiv = document.getElementById('js-test');
+        const testImg = document.createElement('img');
+        testImg.src = 'https://picsum.photos/100/120?random=2';
+        testImg.className = 'test-img';
+        testImg.onload = () => console.log("✅ Image JS chargée");
+        testImg.onerror = () => console.log("❌ Erreur image JS");
+        jsDiv.appendChild(testImg);
+        
+        // Test 3: Simuler les données UFC
+        const mockData = {
+            p4p: [
+                { name: 'Islam Makhachev', photo: 'https://picsum.photos/100/120?random=3' },
+                { name: 'Jon Jones', photo: 'https://picsum.photos/100/120?random=4' }
+            ]
+        };
+        
+        const ufcDiv = document.getElementById('ufc-test');
+        mockData.p4p.forEach((fighter, index) => {
+            const div = document.createElement('div');
+            div.style.display = 'inline-block';
+            div.style.margin = '10px';
+            div.innerHTML = `
+                <img src="${fighter.photo}" class="test-img" 
+                     onload="console.log('✅ ${fighter.name} image chargée')"
+                     onerror="console.log('❌ ${fighter.name} image échouée')">
+                <p>${fighter.name}</p>
+            `;
+            ufcDiv.appendChild(div);
+        });
+        
+        console.log("🏁 Script de test terminé");
+    </script>
+</body>
+</html>

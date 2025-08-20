@@ -1,0 +1,9 @@
+node_modules/
+*.log
+*.tmp
+.DS_Store
+.env
+.cache/
+dist/
+coverage/
+.nyc_output/
