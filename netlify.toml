@@ -5,3 +5,4 @@
   from = "/"
   to = "/tyson-gandhi.html"
   status = 200
+  force = true
