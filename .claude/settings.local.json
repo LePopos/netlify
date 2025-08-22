@@ -12,7 +12,8 @@
       "WebFetch(domain:www.espn.com)",
       "WebFetch(domain:fightingtomatoes.com)",
       "WebFetch(domain:www.ufc-fr.com)",
-      "WebFetch(domain:theallstar.io)"
+      "WebFetch(domain:theallstar.io)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
