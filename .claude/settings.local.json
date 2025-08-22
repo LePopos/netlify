@@ -13,7 +13,8 @@
       "WebFetch(domain:fightingtomatoes.com)",
       "WebFetch(domain:www.ufc-fr.com)",
       "WebFetch(domain:theallstar.io)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git config:*)"
     ],
     "deny": [],
     "ask": []
