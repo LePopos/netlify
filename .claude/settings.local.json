@@ -14,7 +14,9 @@
       "WebFetch(domain:www.ufc-fr.com)",
       "WebFetch(domain:theallstar.io)",
       "Bash(git push:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

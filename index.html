@@ -3,260 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UFC Hub - Classements & Profils des Combattants</title>
-    <meta name="description" content="Hub UFC complet avec classements officiels et profils détaillés des combattants. Découvrez les stats, palmarès et informations de vos fighters préférés.">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <title>Mike Tyson x Gandhi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --ufc-red: #d20a0a;
-            --ufc-gold: #f2b90c;
-            --dark: #0a0a0a;
-            --gray-900: #111111;
-            --gray-800: #1f1f1f;
-            --gray-700: #2d2d2d;
+        .pixel-tyson {
+            width: 200px;
+            height: 200px;
+            background: url('https://i.imgur.com/HL44r.gif') center/contain no-repeat;
+            image-rendering: pixelated;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--gray-900) 50%, var(--gray-800) 100%);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            text-align: center;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(210, 10, 10, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            padding: 0 2rem;
-            z-index: 10;
-            position: relative;
-        }
-
-        .logo {
-            font-family: 'Orbitron', monospace;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--ufc-red) 0%, var(--ufc-gold) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-
-        .tagline {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 4rem;
-            font-weight: 300;
-        }
-
-        .nav-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .nav-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-decoration: none;
-            color: white;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--ufc-red), var(--ufc-gold));
-            transform: translateX(-100%);
-            transition: transform 0.4s ease;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(210, 10, 10, 0.3);
-            border-color: var(--ufc-gold);
-        }
-
-        .nav-card:hover::before {
-            transform: translateX(0);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--ufc-gold);
-        }
-
-        .card-description {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-cta {
-            color: var(--ufc-red);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.875rem;
-        }
-
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--ufc-gold);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        @media (max-width: 768px) {
-            .nav-cards {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .nav-card {
-                padding: 2rem;
-            }
+        
+        .mini-pixel-tyson {
+            width: 60px;
+            height: 60px;
+            background: url('https://i.imgur.com/HL44r.gif') center/contain no-repeat;
+            image-rendering: pixelated;
         }
     </style>
 </head>
-<body>
-    <div class="hero">
-        <div class="particles">
-            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-            <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-            <div class="particle" style="left: 80%; animation-delay: 2s;"></div>
-            <div class="particle" style="left: 90%; animation-delay: 3s;"></div>
+<body class="bg-black min-h-screen flex flex-col items-center justify-center p-4">
+    
+    <!-- Page d'accueil -->
+    <div id="homepage" class="text-center">
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-8 tracking-wide">
+            TYSON × GANDHI
+        </h1>
+        <div class="pixel-tyson mx-auto mb-6 cursor-pointer hover:scale-110 transition-transform duration-300 hover:shadow-2xl" 
+             onclick="startExperience()"></div>
+        <p class="text-gray-400 text-lg">Cliquez sur Iron Mike pour commencer</p>
+    </div>
+
+    <!-- Page principale (cachée initialement) -->
+    <div id="mainpage" class="max-w-2xl w-full text-center hidden">
+        <!-- GIF Container -->
+        <div class="mb-6">
+            <img id="tysonGif" class="w-full max-w-sm h-64 object-cover mx-auto rounded-lg shadow-2xl" alt="Mike Tyson GIF">
         </div>
         
-        <div class="hero-content">
-            <h1 class="logo">UFC HUB</h1>
-            <p class="tagline">Classements officiels & profils détaillés des combattants</p>
-            
-            <div class="nav-cards">
-                <a href="rankings.html" class="nav-card">
-                    <span class="card-icon">📊</span>
-                    <h2 class="card-title">Classements UFC</h2>
-                    <p class="card-description">
-                        Découvrez les classements complets Pound-for-Pound et par catégorie de poids avec photos réelles des combattants.
-                    </p>
-                    <span class="card-cta">Voir les classements →</span>
-                </a>
-                
-                <a href="benoit-saint-denis.html" class="nav-card">
-                    <span class="card-icon">👤</span>
-                    <h2 class="card-title">Profil Fighter</h2>
-                    <p class="card-description">
-                        Explorez le profil complet de Benoit Saint-Denis "God of War" avec statistiques, palmarès et visualisations interactives.
-                    </p>
-                    <span class="card-cta">Voir le profil →</span>
-                </a>
-            </div>
+        <!-- Citation Container avec style doré -->
+        <div class="bg-gradient-to-r from-yellow-600/20 via-yellow-400/20 to-yellow-600/20 backdrop-blur-sm rounded-lg p-6 mb-8 border border-yellow-500/30">
+            <blockquote class="text-yellow-300 text-lg md:text-xl italic leading-relaxed font-light">
+                "<span id="gandhiQuote"></span>"
+            </blockquote>
+            <p class="text-yellow-500 mt-4 text-sm font-semibold">— Mahatma Gandhi</p>
         </div>
         
-        <div class="footer">
-            Développé avec Claude Code & hébergé sur Netlify
+        <!-- Button Another One avec mini Tyson -->
+        <div class="flex items-center justify-center gap-4">
+            <div class="mini-pixel-tyson cursor-pointer hover:scale-110 transition-transform duration-300" 
+                 onclick="loadNewCombo()"></div>
+            <button onclick="loadNewCombo()" 
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-colors duration-300 transform hover:scale-105">
+                ANOTHER ONE
+            </button>
+        </div>
+        
+        <!-- Loading -->
+        <div id="loading" class="hidden text-white text-center mt-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+            <p class="mt-2">Chargement du combo...</p>
         </div>
     </div>
 
     <script>
-        // Animation des particules
-        document.addEventListener('DOMContentLoaded', () => {
-            const particles = document.querySelectorAll('.particle');
-            
-            particles.forEach(particle => {
-                const randomDelay = Math.random() * 3;
-                const randomDuration = 4 + Math.random() * 4;
-                particle.style.animationDelay = randomDelay + 's';
-                particle.style.animationDuration = randomDuration + 's';
-            });
+        const gandhiQuotes = [
+            "Soyez le changement que vous voulez voir dans le monde.",
+            "La force ne vient pas de la capacité physique. Elle vient d'une volonté indomptable.",
+            "Vis comme si tu devais mourir demain. Apprends comme si tu devais vivre éternellement.",
+            "La non-violence est une arme des forts.",
+            "Il n'y a pas de chemin vers la paix, la paix est le chemin.",
+            "L'erreur ne devient pas vérité parce qu'elle se propage et se multiplie.",
+            "La vraie beauté réside dans la pureté du cœur.",
+            "Un homme n'est que le produit de ses pensées ; ce qu'il pense, il le devient.",
+            "La liberté ne vaut rien si elle ne comprend pas la liberté de se tromper.",
+            "Personne ne peut me blesser sans ma permission.",
+            "La joie réside dans l'effort, pas dans la victoire.",
+            "Chaque fois que vous êtes confronté à un adversaire, conquérez-le avec l'amour.",
+            "La colère est l'ennemi de la non-violence et l'orgueil est un monstre qui l'avale.",
+            "Il est difficile mais pas impossible de conduire une révolution paisible.",
+            "La simplicité est l'essence de l'universalité.",
+            "L'intolérance est en soi une forme de violence.",
+            "La vérité est dure comme un diamant et fragile comme une fleur de pêcher.",
+            "Le bonheur, c'est quand ce que vous pensez, ce que vous dites et ce que vous faites sont en harmonie.",
+            "Nous devons devenir le changement que nous voulons voir.",
+            "La patience signifie souffrir de soi-même."
+        ];
 
-            // Animation d'entrée
-            const cards = document.querySelectorAll('.nav-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
+        async function getRandomTysonGif() {
+            const apiKey = 'GlVGYHkr3WSBnllca54iNt0yFbjz7L65'; // Clé publique Giphy
+            const response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=mike+tyson+boxing&limit=50&rating=pg-13`);
+            const data = await response.json();
+            const randomIndex = Math.floor(Math.random() * data.data.length);
+            return data.data[randomIndex].images.original.url;
+        }
+
+        function getRandomGandhiQuote() {
+            const randomIndex = Math.floor(Math.random() * gandhiQuotes.length);
+            return gandhiQuotes[randomIndex];
+        }
+
+        function startExperience() {
+            document.getElementById('homepage').classList.add('hidden');
+            document.getElementById('mainpage').classList.remove('hidden');
+            loadNewCombo();
+        }
+
+        async function loadNewCombo() {
+            const loading = document.getElementById('loading');
+            const gif = document.getElementById('tysonGif');
+            const quote = document.getElementById('gandhiQuote');
+            
+            loading.classList.remove('hidden');
+            
+            try {
+                const [gifUrl] = await Promise.all([
+                    getRandomTysonGif(),
+                    new Promise(resolve => setTimeout(resolve, 500))
+                ]);
                 
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 200 + 500);
-            });
-        });
+                gif.src = gifUrl;
+                quote.textContent = getRandomGandhiQuote();
+                
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                quote.textContent = "Dans un monde où vous pouvez être n'importe quoi, soyez gentil.";
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
